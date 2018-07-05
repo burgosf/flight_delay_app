@@ -1,0 +1,18 @@
+version: '2'
+services:
+  web:
+    build: .
+    image: web
+    ports:
+      - "5000:80"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=app.py
+      - DYNACONF_SETTINGS=core.settings
+
+  docs: # this is for building swagger docs
+    image: swaggerapi/swagger-codegen-cli
+    volumes:
+      - ./docs:/local
+    command: generate -i /local/API.yml -l html2 -o /local/html2

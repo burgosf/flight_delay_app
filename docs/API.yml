@@ -1,0 +1,123 @@
+swagger: "2.0"
+info:
+  description: "Delay App example"
+  version: "0.1.0-ALPHA"
+  title: "Example"
+  contact:
+    email: "florian.burgos@gmail.com"
+host: "florian.burgos.com"
+basePath: "/v2"
+schemes:
+- "http"
+paths:
+  /healthcheck:
+    get:
+      summary: "Provide information if service is alive."
+      description: "This endpoint can be used by other services or loadbalancer to establish if service is alive."
+      operationId: "healthcheck"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Service is alive."
+          schema:
+            type: "object"
+            $ref: "#/definitions/HealtcheckStatus"
+  /delay:
+    post:
+      summary: "estimate if a flight will land with a delay"
+      operationId: "delay"
+      parameters:
+        - in: "body"
+          name: "delay"
+          schema:
+            type: "object"
+            $ref: "#/definitions/DelayRequest"
+          description: a segment
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "delayed"
+          schema:
+            type: "object"
+            $ref: "#/definitions/DelayResponse"
+        400:
+          description: "Validation Error"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found Error"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Error"
+        503:
+          description: "Service unavailable (because of one of partners API is not responding)"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Error"
+definitions:
+  HealtcheckStatus:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        description: "Healthcheck Status"
+        enum:
+        - "OK"
+  DelayRequest:
+    type: "object"
+    properties:
+      departure_datetime:
+        type: "string"
+        format: "YYYY-MM-MMTHH:MM:SS"
+      arrival_datetime:
+        type: "string"
+        format: "YYYY-MM-MMTHH:MM:SS"
+      origin:
+        type: "string"
+      destination:
+        type: "string"
+      carrier:
+        type: "string"
+      flight_number:
+        type: "string"
+      airtime:
+        type: "integer"
+      distance:
+        type: "integer"
+  DelayResponse:
+    type: "object"
+    properties:
+      departure_datetime:
+        type: "string"
+        format: "YYYY-MM-MMTHH:MM:SS"
+      arrival_datetime:
+        type: "string"
+        format: "YYYY-MM-MMTHH:MM:SS"
+      origin:
+        type: "string"
+      destination:
+        type: "string"
+      carrier:
+        type: "string"
+      flight_number:
+        type: "string"
+      airtime:
+        type: "integer"
+      distance:
+        type: "integer"
+      delayed:
+        type: "boolean"
+      proba:
+        type: "number"
+  Error:
+    type: "object"
+    properties:
+      errors:
+        type: "object"
+        description: "List of errors"
+      message:
+        type: "string"
+        description: "Reason of error"

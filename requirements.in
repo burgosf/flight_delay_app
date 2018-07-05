@@ -1,0 +1,16 @@
+bandit
+dynaconf
+flake8
+flask
+flask-restful
+gunicorn
+joblib
+marshmallow
+newrelic
+requests
+pytest
+pytest-watch
+pytest-flask
+pytest-cov
+pytest-html
+six==1.10.0
